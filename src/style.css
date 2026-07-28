@@ -1,8 +1,9 @@
 :root {
+  color-scheme: dark;
   --bg: #000000;
-  --bg-2: #0a0a0a;
-  --surface: #111111;
-  --surface-2: #1a1a1a;
+  --bg-2: #050505;
+  --surface: #0d0d0d;
+  --surface-2: #161616;
   --line: rgba(212, 162, 76, 0.2);
   --line-strong: rgba(255, 255, 255, 0.1);
   --text: #f3efe6;
@@ -26,14 +27,20 @@ html,
 body,
 #app {
   min-height: 100%;
+  background: #000000;
+  color: var(--text);
 }
 
 body {
   margin: 0;
   font-family: var(--font);
   color: var(--text);
+  background: #000000 !important;
+}
+
+.app-shell,
+.main {
   background: #000000;
-  background-attachment: fixed;
 }
 
 button,
