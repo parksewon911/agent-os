@@ -1,6 +1,6 @@
 export const brand = {
-  name: '설계원',
-  english: 'SEOLGYEONE',
+  name: '설계사 AI',
+  english: 'SEOLGYESA AI',
   tagline: '보험설계사 AI 업무 플랫폼',
   subtitle: '상담 · 증권 · 리모델링 · 후속 · 실적 · 리크루팅을 한곳에서',
 }

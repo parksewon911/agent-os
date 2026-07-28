@@ -79,7 +79,7 @@ const today = new Date().toISOString().slice(0, 10).replace(/-/g, '')
 
 function draftMessage() {
   copied.value = false
-  message.value = `${customer.value.name}님, 안녕하세요. 설계원 AI 도우미입니다.
+  message.value = `${customer.value.name}님, 안녕하세요. 설계사 AI 도우미입니다.
 어제 상담 내용을 짧게 정리해 드렸어요.
 
 • ${purpose.value}
