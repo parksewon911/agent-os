@@ -4,9 +4,10 @@
       <h2>{{ brand.name }}에 오신 걸 환영합니다</h2>
       <p>{{ brand.subtitle }} · 오늘 상담 {{ todayConsults }}건 · AI 추천 후속 {{ followups }}건</p>
       <div class="actions">
-        <RouterLink class="btn btn-primary" to="/assistant">AI 상담 비서 열기</RouterLink>
-        <RouterLink class="btn btn-ghost" to="/ocr">증권 확인</RouterLink>
-        <RouterLink class="btn btn-teal" to="/materials">후속 메시지 만들기</RouterLink>
+        <RouterLink class="btn btn-primary" to="/analysis">AI 보장분석</RouterLink>
+        <RouterLink class="btn btn-ghost" to="/calculator">금융계산기</RouterLink>
+        <RouterLink class="btn btn-teal" to="/gems">Gemini AI</RouterLink>
+        <RouterLink class="btn btn-ghost" to="/assistant">AI 상담 비서</RouterLink>
       </div>
     </div>
 

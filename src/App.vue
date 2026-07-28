@@ -33,5 +33,8 @@ const iconMap = {
   share: '↗',
   recruit: '☆',
   team: '☰',
+  analysis: '▣',
+  calc: '∑',
+  gem: '✦',
 }
 </script>
