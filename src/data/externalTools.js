@@ -1,14 +1,33 @@
-/** 참고·연동 외부 도구 (프로 보장분석 / 금융계산기 / Gemini Gem) */
+/**
+ * 외부 참고 도구 — 구조·데이터 출처 요약
+ *
+ * [보장분석 https://pro-insuranceanalysis.com ]
+ *  - PDF.js 텍스트 추출
+ *  - parserEngineV2: 보험사별 담보 파싱
+ *  - coverageMaster: 카테고리·권장금액·레이더
+ *  - Gemini/Vertex 프록시(/api/gemini-proxy, /api/vertex-proxy)로 제안서 AI 분석
+ *  - Supabase: analysis_customers, analysis_snapshots / Firebase Auth
+ *  - 리포트에 '소속: 인카금융서비스' 하드코딩됨 → 설계사 AI에는 이식하지 않음
+ *
+ * [금융계산기 https://pro-financecalculator.vercel.app ]
+ *  - 계산은 전부 브라우저 공식
+ *  - /api/rate → 네이버 환율
+ *  - Supabase는 익명 사용량 로그만
+ *
+ * [Gemini Gem 공유 링크]
+ *  - Google 계정 로그인 후 Gem 프롬프트·지식으로 응답 (서버는 Google)
+ */
+
 export const analysisTool = {
-  name: 'PRO AI 보장분석표',
+  name: '외부 보장분석 참고',
   url: 'https://pro-insuranceanalysis.com/',
-  desc: 'PDF 업로드 → 자동 보장분석 → Before/After 리포트',
+  desc: 'PDF→파서→권장담보→Before/After 파이프라인 참고용',
 }
 
 export const calculatorTool = {
-  name: 'PRO Calculator',
+  name: '외부 금융계산 참고',
   url: 'https://pro-financecalculator.vercel.app/',
-  desc: '예적금·대출·부동산·은퇴·실손·상속증여 등 실시간 시뮬레이션',
+  desc: '카테고리·공식·환율 API 구조 참고용',
   categories: [
     '부동산 통합',
     '상속 및 증여세',
@@ -24,7 +43,6 @@ export const calculatorTool = {
   ],
 }
 
-/** Gemini Gem — 로그인 후 사용 (공유 링크) */
 export const geminiGems = [
   {
     id: 'a21651eef85c',
@@ -47,7 +65,7 @@ export const geminiGems = [
   {
     id: '577a8cec82dc',
     title: '후속·리크루팅 Gem',
-    desc: '카톡/문자 후속 메시지 · 리크루팅 멘트를 빠르게',
+    desc: '카톡/문자 후속 메시지 · 리크루팅 멘트',
     url: 'https://gemini.google.com/gem/577a8cec82dc?usp=sharing',
   },
 ]

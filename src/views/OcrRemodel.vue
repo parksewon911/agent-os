@@ -24,6 +24,7 @@
         <div v-if="done" class="actions">
           <span class="tag ok">OCR 완료</span>
           <span class="tag">신뢰도 94%</span>
+          <RouterLink class="btn btn-primary" to="/analysis">보장분석으로 보내기</RouterLink>
         </div>
       </article>
 

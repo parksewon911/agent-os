@@ -8,10 +8,10 @@
 |------|------|
 | 대시보드 | 상담·계약점수·팀 실적 한눈에 |
 | 고객 관리 | 고객 파이프라인·보장 공백·계약 점수 |
-| AI 보장분석 | PDF 업로드·Before/After·리스크 지표 ([PRO 보장분석](https://pro-insuranceanalysis.com/) 참고) |
+| AI 보장분석 | PDF 파싱→담보 정규화→권장 대비→Before/After→로컬 스냅샷 |
 | 증권 확인 | 증권 분석 + 리모델링 A/B/C안 |
 | 부족 보장 진단 | 고객별 보장 공백 자동 진단 |
-| 금융계산기 | 예적금·갱신비교 등 ([PRO Calculator](https://pro-financecalculator.vercel.app/) 참고) |
+| 금융계산기 | 예적금·대출·갱신비교·실손·달러(환율 API) |
 | AI 상담 비서 | 실시간 스크립트 + 상담 기록 자동 요약 |
 | Gemini AI | 공유 Gemini Gem 바로가기 |
 | 상담자료·후속 메시지 | PDF 생성 + 카카오/문자 초안 |

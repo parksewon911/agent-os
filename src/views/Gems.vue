@@ -3,7 +3,7 @@
     <div class="page-head">
       <div>
         <h1>Gemini AI Gem</h1>
-        <p>공유된 Gemini Gem으로 상담·분석·문구를 바로 실행합니다 (Google 로그인 필요)</p>
+        <p>Google Gemini 공유 Gem · 응답 데이터는 Google 계정/모델에서 생성됩니다</p>
       </div>
     </div>
 
@@ -26,8 +26,11 @@
     </div>
 
     <article class="card" style="margin-top: 16px">
-      <h3>앱 안 비서와 함께 쓰기</h3>
-      <p class="muted">Gem으로 초안을 만든 뒤, 앱의 AI 상담 비서·후속 메시지 화면에 붙여 넣어 고객별로 저장하세요.</p>
+      <h3>앱과 함께 쓰기</h3>
+      <p class="muted">
+        Gem 초안 → 앱의 AI 상담 비서·후속 메시지·보장분석에 붙여 고객별로 저장하세요.
+        소속/직함은 직접 입력한 내용만 사용합니다.
+      </p>
       <div class="actions">
         <RouterLink class="btn btn-ghost" to="/assistant">AI 상담 비서</RouterLink>
         <RouterLink class="btn btn-ghost" to="/materials">후속 메시지</RouterLink>

@@ -503,3 +503,22 @@ a {
 .page-head a {
   color: var(--accent-2);
 }
+
+.report-card .report-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.report-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+button.step-chip {
+  cursor: pointer;
+  background: transparent;
+  font: inherit;
+}
