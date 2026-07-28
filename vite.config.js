@@ -43,7 +43,7 @@ function geminiDevApi() {
             prompt,
             system,
             history = [],
-            model = 'gemini-2.0-flash',
+            model = 'gemini-2.5-flash',
             temperature = 0.7,
           } = body
 
@@ -64,33 +64,55 @@ function geminiDevApi() {
           }
           contents.push({ role: 'user', parts: [{ text: prompt }] })
 
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${apiKey}`
-          const payload = {
-            contents,
-            generationConfig: { temperature, maxOutputTokens: 2048 },
-          }
-          if (system) payload.systemInstruction = { parts: [{ text: system }] }
+          const modelsToTry = [model, 'gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.0-flash']
+            .filter((m, i, arr) => arr.indexOf(m) === i)
 
-          const upstream = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-          })
-          const data = await upstream.json()
-          res.setHeader('Content-Type', 'application/json')
-          if (!upstream.ok) {
+          let data = null
+          let usedModel = model
+          let lastStatus = 500
+          let lastMsg = ''
+
+          for (const m of modelsToTry) {
+            usedModel = m
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(m)}:generateContent?key=${apiKey}`
+            const payload = {
+              contents,
+              generationConfig: { temperature, maxOutputTokens: 2048 },
+            }
+            if (system) payload.systemInstruction = { parts: [{ text: system }] }
+
+            const upstream = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            })
+            data = await upstream.json()
+            lastStatus = upstream.status
+            lastMsg = data?.error?.message || ''
+            if (upstream.ok) break
+            if ([404, 429, 503].includes(upstream.status)) continue
             res.statusCode = upstream.status
-            res.end(JSON.stringify({ error: data?.error?.message || 'Gemini API 오류' }))
+            res.setHeader('Content-Type', 'application/json')
+            res.end(JSON.stringify({ error: lastMsg || 'Gemini API 오류' }))
+            return
+          }
+
+          res.setHeader('Content-Type', 'application/json')
+          if (!data || lastStatus >= 400) {
+            res.statusCode = lastStatus || 502
+            res.end(JSON.stringify({ error: lastMsg || 'Gemini 응답 실패' }))
             return
           }
           const text =
             data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || ''
           res.statusCode = 200
-          res.end(JSON.stringify({ text, model }))
+          res.end(JSON.stringify({ text, model: usedModel }))
+          return
         } catch (err) {
           res.statusCode = 500
           res.setHeader('Content-Type', 'application/json')
           res.end(JSON.stringify({ error: err?.message || '서버 오류' }))
+          return
         }
       })
     },

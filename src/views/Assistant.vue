@@ -3,7 +3,7 @@
     <div class="page-head">
       <div>
         <h1>AI 상담 비서</h1>
-        <p>Gemini 연동 · 상담 스크립트 · 기록 자동 요약</p>
+        <p>질문하면 바로 답변합니다 · 상담 스크립트 · 기록 요약</p>
       </div>
       <button class="btn btn-primary" type="button" :disabled="busy" @click="summarize">
         {{ busy && mode === 'summary' ? '요약 중…' : '상담 기록 요약' }}
@@ -14,7 +14,7 @@
 
     <div class="grid grid-2">
       <article class="card">
-        <h3>실시간 비서 <span class="tag">Gemini</span></h3>
+        <h3>실시간 비서</h3>
         <div class="chat" style="margin-top: 12px">
           <div v-for="(m, i) in messages" :key="i" class="bubble" :class="m.role">
             {{ m.text }}
@@ -23,19 +23,19 @@
         <div class="field" style="margin-top: 14px">
           <input
             v-model="input"
-            placeholder="고객 상황이나 질문을 입력하세요"
+            placeholder="궁금한 점을 입력하세요"
             :disabled="busy"
             @keyup.enter="ask"
           />
         </div>
         <button class="btn btn-teal" type="button" :disabled="busy" @click="ask">
-          {{ busy && mode === 'chat' ? '답변 생성 중…' : 'Gemini에게 묻기' }}
+          {{ busy && mode === 'chat' ? '답변 중…' : '질문하기' }}
         </button>
       </article>
 
       <article class="card">
         <h3>상담 기록 자동 요약</h3>
-        <p class="muted">녹취/메모를 붙여넣으면 Gemini가 핵심만 정리합니다</p>
+        <p class="muted">녹취/메모를 붙여넣으면 핵심만 정리합니다</p>
         <div class="field" style="margin-top: 12px">
           <textarea v-model="raw" />
         </div>
@@ -62,7 +62,7 @@ const mode = ref('')
 const messages = ref([
   {
     role: 'ai',
-    text: '안녕하세요. Gemini 상담 비서입니다. 고객 연령·가족구성·기존 증권을 알려주시면 맞춤 스크립트를 제안합니다.',
+    text: '안녕하세요. 고객 상황이나 상담 질문을 입력해 주세요. 맞춤 스크립트와 포인트를 바로 답해 드립니다.',
   },
 ])
 

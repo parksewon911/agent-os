@@ -37,7 +37,7 @@
       </article>
 
       <article class="card">
-        <h3>생성 결과 <span class="tag">Gemini</span></h3>
+        <h3>생성 결과</h3>
         <p v-if="!output" class="muted">주제를 정한 뒤 생성하세요.</p>
         <div v-else class="gap-item" style="flex-direction: column; align-items: stretch">
           <span class="tag">{{ channel }}</span>

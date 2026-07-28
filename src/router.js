@@ -12,7 +12,6 @@ import Recruit from './views/Recruit.vue'
 import Team from './views/Team.vue'
 import Analysis from './views/Analysis.vue'
 import Calculator from './views/Calculator.vue'
-import Gems from './views/Gems.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -21,10 +20,10 @@ const router = createRouter({
     { path: '/crm', component: Crm },
     { path: '/analysis', component: Analysis },
     { path: '/assistant', component: Assistant },
+    { path: '/gems', redirect: '/assistant' },
     { path: '/ocr', component: OcrRemodel },
     { path: '/coverage', component: Coverage },
     { path: '/calculator', component: Calculator },
-    { path: '/gems', component: Gems },
     { path: '/materials', component: Materials },
     { path: '/insights', component: Insights },
     { path: '/compare', component: Compare },

@@ -8,7 +8,7 @@
       <div class="actions">
         <button class="btn btn-ghost" type="button" @click="saveWork" :disabled="!result">작업 저장</button>
         <button class="btn btn-teal" type="button" :disabled="!result || geminiBusy" @click="refineOpinion">
-          {{ geminiBusy ? 'Gemini 작성 중…' : 'AI 종합의견 (Gemini)' }}
+          {{ geminiBusy ? '의견 작성 중…' : 'AI 종합의견 다듬기' }}
         </button>
         <button class="btn btn-primary" type="button" @click="runAnalysis">분석 실행</button>
       </div>

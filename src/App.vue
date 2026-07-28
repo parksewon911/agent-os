@@ -35,6 +35,5 @@ const iconMap = {
   team: '☰',
   analysis: '▣',
   calc: '∑',
-  gem: '✦',
 }
 </script>

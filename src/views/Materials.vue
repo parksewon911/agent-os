@@ -50,7 +50,7 @@
           </select>
         </div>
         <button class="btn btn-teal" type="button" :disabled="busy" @click="draftMessage">
-          {{ busy ? 'Gemini 작성 중…' : '메시지 자동 작성' }}
+          {{ busy ? '작성 중…' : '메시지 자동 작성' }}
         </button>
         <p v-if="error" style="color: var(--danger); margin-top: 8px">{{ error }}</p>
         <div v-if="message" class="gap-item" style="margin-top: 14px; flex-direction: column; align-items: stretch">

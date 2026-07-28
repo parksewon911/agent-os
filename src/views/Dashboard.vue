@@ -6,8 +6,7 @@
       <div class="actions">
         <RouterLink class="btn btn-primary" to="/analysis">AI 보장분석</RouterLink>
         <RouterLink class="btn btn-ghost" to="/calculator">금융계산기</RouterLink>
-        <RouterLink class="btn btn-teal" to="/gems">Gemini AI</RouterLink>
-        <RouterLink class="btn btn-ghost" to="/assistant">AI 상담 비서</RouterLink>
+        <RouterLink class="btn btn-teal" to="/assistant">AI 상담 비서</RouterLink>
       </div>
     </div>
 
