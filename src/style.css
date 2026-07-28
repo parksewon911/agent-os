@@ -1,18 +1,18 @@
 :root {
-  --bg: #07141c;
-  --bg-2: #0b1f2a;
-  --surface: #122833;
-  --surface-2: #183442;
-  --line: rgba(212, 162, 76, 0.18);
+  --bg: #000000;
+  --bg-2: #0a0a0a;
+  --surface: #111111;
+  --surface-2: #1a1a1a;
+  --line: rgba(212, 162, 76, 0.2);
   --line-strong: rgba(255, 255, 255, 0.1);
   --text: #f3efe6;
-  --muted: #9aafb8;
+  --muted: #9a9a9a;
   --accent: #d4a24c;
   --accent-2: #e8c27a;
   --teal: #3db8a0;
   --danger: #e07a6a;
   --ok: #6ecf8e;
-  --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   --radius: 18px;
   --font: 'IBM Plex Sans KR', sans-serif;
   --display: 'Outfit', 'IBM Plex Sans KR', sans-serif;
@@ -32,10 +32,7 @@ body {
   margin: 0;
   font-family: var(--font);
   color: var(--text);
-  background:
-    radial-gradient(900px 500px at 10% -10%, rgba(212, 162, 76, 0.16), transparent 55%),
-    radial-gradient(800px 480px at 100% 0%, rgba(61, 184, 160, 0.1), transparent 50%),
-    linear-gradient(165deg, #07141c 0%, #0b1f2a 45%, #0a1820 100%);
+  background: #000000;
   background-attachment: fixed;
 }
 
@@ -63,7 +60,7 @@ a {
   height: 100vh;
   padding: 28px 18px;
   border-right: 1px solid var(--line);
-  background: rgba(7, 20, 28, 0.72);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(16px);
   overflow-y: auto;
 }
@@ -157,7 +154,7 @@ a {
 }
 
 .card {
-  background: linear-gradient(160deg, rgba(24, 52, 66, 0.9), rgba(18, 40, 51, 0.92));
+  background: linear-gradient(160deg, rgba(26, 26, 26, 0.95), rgba(17, 17, 17, 0.98));
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   padding: 18px;
@@ -349,8 +346,8 @@ a {
   padding: 28px;
   border: 1px solid var(--line);
   background:
-    linear-gradient(120deg, rgba(212, 162, 76, 0.18), transparent 45%),
-    linear-gradient(160deg, #122833, #0b1f2a);
+    linear-gradient(120deg, rgba(212, 162, 76, 0.14), transparent 45%),
+    linear-gradient(160deg, #1a1a1a, #0a0a0a);
   margin-bottom: 18px;
 }
 
