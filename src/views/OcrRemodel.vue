@@ -2,7 +2,7 @@
   <section>
     <div class="page-head">
       <div>
-        <h1>증권 OCR · 리모델링 분석</h1>
+        <h1>증권 확인</h1>
         <p>보험증권 업로드 → 보장 추출 → 리모델링 제안</p>
       </div>
       <button class="btn btn-primary" type="button" @click="runOcr">샘플 증권 분석</button>

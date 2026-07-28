@@ -2,7 +2,7 @@
   <section>
     <div class="page-head">
       <div>
-        <h1>고객 CRM</h1>
+        <h1>고객 관리</h1>
         <p>보험설계사 전용 · 상담 이력 · 보장 공백 · 계약 점수를 고객 단위로 관리</p>
       </div>
       <button class="btn btn-primary" type="button">고객 추가</button>

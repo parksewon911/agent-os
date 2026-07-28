@@ -2,7 +2,7 @@
   <section>
     <div class="page-head">
       <div>
-        <h1>리크루팅 CRM</h1>
+        <h1>리크루팅 현황</h1>
         <p>지원자 파이프라인 · 면접 · 적합도 점수 관리</p>
       </div>
       <button class="btn btn-primary" type="button">지원자 등록</button>
