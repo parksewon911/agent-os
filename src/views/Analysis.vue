@@ -7,6 +7,9 @@
       </div>
       <div class="actions">
         <button class="btn btn-ghost" type="button" @click="saveWork" :disabled="!result">작업 저장</button>
+        <button class="btn btn-teal" type="button" :disabled="!result || geminiBusy" @click="refineOpinion">
+          {{ geminiBusy ? 'Gemini 작성 중…' : 'AI 종합의견 (Gemini)' }}
+        </button>
         <button class="btn btn-primary" type="button" @click="runAnalysis">분석 실행</button>
       </div>
     </div>
@@ -149,6 +152,7 @@
         </tbody>
       </table>
       <p style="margin: 16px 0 0; line-height: 1.6">{{ result.opinion }}</p>
+      <p v-if="geminiError" style="color: var(--danger)">{{ geminiError }}</p>
       <div class="muted" style="margin-top: 10px">
         월 보험료 {{ result.premiumBefore.toLocaleString() }}원 →
         {{ result.premiumAfter.toLocaleString() }}원
@@ -203,6 +207,7 @@ import {
   runFullAnalysis,
   saveSnapshot,
 } from '../services/analysisEngine.js'
+import { askGemini } from '../services/gemini.js'
 
 const step = ref(0)
 const form = reactive({
@@ -219,6 +224,8 @@ const beforeParse = ref(null)
 const afterParse = ref(null)
 const result = ref(null)
 const snapshots = ref([])
+const geminiBusy = ref(false)
+const geminiError = ref('')
 
 function loadBefore() {
   beforeParse.value = structuredClone(SAMPLE_BEFORE_PARSE)
@@ -235,6 +242,30 @@ function runAnalysis() {
   if (!afterParse.value) loadAfter()
   result.value = runFullAnalysis(form, beforeParse.value, afterParse.value)
   step.value = 3
+  geminiError.value = ''
+}
+
+async function refineOpinion() {
+  if (!result.value || geminiBusy.value) return
+  geminiBusy.value = true
+  geminiError.value = ''
+  try {
+    const diffLines = result.value.diff
+      .map((d) => `- ${d.label}: ${d.before} → ${d.after} (권장 ${d.goalLabel}, ${d.status})`)
+      .join('\n')
+    result.value.opinion = await askGemini({
+      prompt: `보험 보장분석 AI 종합 의견을 한국어로 작성하세요. 3~5문장.
+고객: ${form.insured}, ${form.age}세 ${form.gender}
+월 보험료: ${result.value.premiumBefore} → ${result.value.premiumAfter}원
+담보 변화:
+${diffLines}
+조직명·총괄 직함은 넣지 마세요. 의견 본문만 출력.`,
+    })
+  } catch (e) {
+    geminiError.value = e.message
+  } finally {
+    geminiBusy.value = false
+  }
 }
 
 function saveWork() {

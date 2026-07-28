@@ -3,14 +3,18 @@
     <div class="page-head">
       <div>
         <h1>AI 상담 비서</h1>
-        <p>상담 중 질문 답변 · 스크립트 제안 · 기록 자동 요약</p>
+        <p>Gemini 연동 · 상담 스크립트 · 기록 자동 요약</p>
       </div>
-      <button class="btn btn-primary" type="button" @click="summarize">상담 기록 요약</button>
+      <button class="btn btn-primary" type="button" :disabled="busy" @click="summarize">
+        {{ busy && mode === 'summary' ? '요약 중…' : '상담 기록 요약' }}
+      </button>
     </div>
+
+    <p v-if="error" class="card" style="color: var(--danger); margin-bottom: 16px">{{ error }}</p>
 
     <div class="grid grid-2">
       <article class="card">
-        <h3>실시간 비서</h3>
+        <h3>실시간 비서 <span class="tag">Gemini</span></h3>
         <div class="chat" style="margin-top: 12px">
           <div v-for="(m, i) in messages" :key="i" class="bubble" :class="m.role">
             {{ m.text }}
@@ -20,15 +24,18 @@
           <input
             v-model="input"
             placeholder="고객 상황이나 질문을 입력하세요"
+            :disabled="busy"
             @keyup.enter="ask"
           />
         </div>
-        <button class="btn btn-teal" type="button" @click="ask">AI에게 묻기</button>
+        <button class="btn btn-teal" type="button" :disabled="busy" @click="ask">
+          {{ busy && mode === 'chat' ? '답변 생성 중…' : 'Gemini에게 묻기' }}
+        </button>
       </article>
 
       <article class="card">
         <h3>상담 기록 자동 요약</h3>
-        <p class="muted">녹취/메모를 붙여넣으면 핵심만 정리합니다</p>
+        <p class="muted">녹취/메모를 붙여넣으면 Gemini가 핵심만 정리합니다</p>
         <div class="field" style="margin-top: 12px">
           <textarea v-model="raw" />
         </div>
@@ -44,32 +51,64 @@
 <script setup>
 import { ref } from 'vue'
 import { consultTranscript } from '../data/mock.js'
+import { askGemini } from '../services/gemini.js'
 
 const input = ref('')
 const raw = ref(consultTranscript.trim())
 const summary = ref('')
+const error = ref('')
+const busy = ref(false)
+const mode = ref('')
 const messages = ref([
   {
     role: 'ai',
-    text: '안녕하세요. 오늘 상담 포인트를 정리해 드릴게요. 고객 연령·가족구성·기존 증권을 알려주시면 맞춤 스크립트를 제안합니다.',
+    text: '안녕하세요. Gemini 상담 비서입니다. 고객 연령·가족구성·기존 증권을 알려주시면 맞춤 스크립트를 제안합니다.',
   },
 ])
 
-function ask() {
+async function ask() {
   const q = input.value.trim()
-  if (!q) return
+  if (!q || busy.value) return
   messages.value.push({ role: 'user', text: q })
   input.value = ''
-  messages.value.push({
-    role: 'ai',
-    text: `「${q}」 기준으로 보면, ①실손 갱신 부담 설명 ②암·간병 공백 제시 ③월 3만 원대 리모델링안 비교가 효과적입니다. 필요하면 상담자료 PDF도 바로 만들어 드릴까요?`,
-  })
+  busy.value = true
+  mode.value = 'chat'
+  error.value = ''
+  try {
+    const history = messages.value.slice(0, -1).map((m) => ({ role: m.role, text: m.text }))
+    const text = await askGemini({
+      prompt: q,
+      history,
+      system:
+        '당신은 보험설계사 현장 상담 비서입니다. 실무 스크립트·질문·비교 포인트를 한국어로 간결히 제안하세요. 조직명·총괄 직함은 넣지 마세요.',
+    })
+    messages.value.push({ role: 'ai', text })
+  } catch (e) {
+    error.value = e.message
+    messages.value.push({
+      role: 'ai',
+      text: '응답을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요.',
+    })
+  } finally {
+    busy.value = false
+    mode.value = ''
+  }
 }
 
-function summarize() {
-  summary.value = `• 고객 고민: 실손 보험료 인상, 자녀 병원비, 암 보장 불안
-• 니즈: 기존 증권 점검 + 암·수술·간병 보강
-• 다음 액션: 증권 OCR 분석 → 리모델링 2안 제시 → 3일 내 카톡 후속
-• 톤: 부담 덜어주는 설명, 숫자 비교 중심`
+async function summarize() {
+  if (busy.value) return
+  busy.value = true
+  mode.value = 'summary'
+  error.value = ''
+  try {
+    summary.value = await askGemini({
+      prompt: `다음 상담 메모/녹취를 설계사용으로 요약하세요.\n형식:\n• 고객 고민\n• 니즈\n• 다음 액션\n• 권장 톤\n\n---\n${raw.value}`,
+    })
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    busy.value = false
+    mode.value = ''
+  }
 }
 </script>

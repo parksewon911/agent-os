@@ -3,10 +3,14 @@
     <div class="page-head">
       <div>
         <h1>SNS 콘텐츠 자동 생성</h1>
-        <p>인스타 · 블로그 · 카드뉴스용 문구를 AI로 작성</p>
+        <p>Gemini로 인스타 · 블로그 · 카드뉴스 문구 작성</p>
       </div>
-      <button class="btn btn-primary" type="button" @click="generate">콘텐츠 생성</button>
+      <button class="btn btn-primary" type="button" :disabled="busy" @click="generate">
+        {{ busy ? '생성 중…' : '콘텐츠 생성' }}
+      </button>
     </div>
+
+    <p v-if="error" class="card" style="color: var(--danger); margin-bottom: 16px">{{ error }}</p>
 
     <div class="grid grid-2">
       <article class="card">
@@ -33,7 +37,7 @@
       </article>
 
       <article class="card">
-        <h3>생성 결과</h3>
+        <h3>생성 결과 <span class="tag">Gemini</span></h3>
         <p v-if="!output" class="muted">주제를 정한 뒤 생성하세요.</p>
         <div v-else class="gap-item" style="flex-direction: column; align-items: stretch">
           <span class="tag">{{ channel }}</span>
@@ -46,26 +50,30 @@
 
 <script setup>
 import { ref } from 'vue'
+import { askGemini } from '../services/gemini.js'
 
 const topic = ref('실손 보험료 인상, 어떻게 대비할까')
 const channel = ref('인스타그램')
 const tone = ref('전문적이지만 친절하게')
 const output = ref('')
+const busy = ref(false)
+const error = ref('')
 
-function generate() {
-  output.value = `📌 ${topic.value}
-
-실손 보험료가 매년 오르는 이유,
-그리고 ‘갱신형 vs 전환’을 가르는 기준을 정리했어요.
-
-✔ 지금 증권이 갱신형인지 확인
-✔ 암·수술·간병 공백 체크
-✔ 월 부담 가능한 리모델링안 비교
-
-설계사가 증권만 보면 10분 안에 방향을 잡아드립니다.
-DM으로 ‘증권점검’ 남겨주세요.
-
-#보험설계사 #실손보험 #보장분석 #${channel.value.replace(/\s/g, '')}
-(${tone.value})`
+async function generate() {
+  busy.value = true
+  error.value = ''
+  try {
+    output.value = await askGemini({
+      prompt: `${channel.value}용 SNS 콘텐츠를 작성하세요.
+주제: ${topic.value}
+톤: ${tone.value}
+해시태그 포함. 특정 금융사 조직명·총괄 직함은 넣지 마세요.
+본문만 출력.`,
+    })
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    busy.value = false
+  }
 }
 </script>

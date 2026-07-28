@@ -49,7 +49,10 @@
             <option>미팅 리마인드</option>
           </select>
         </div>
-        <button class="btn btn-teal" type="button" @click="draftMessage">메시지 자동 작성</button>
+        <button class="btn btn-teal" type="button" :disabled="busy" @click="draftMessage">
+          {{ busy ? 'Gemini 작성 중…' : '메시지 자동 작성' }}
+        </button>
+        <p v-if="error" style="color: var(--danger); margin-top: 8px">{{ error }}</p>
         <div v-if="message" class="gap-item" style="margin-top: 14px; flex-direction: column; align-items: stretch">
           <strong>{{ channel }} 초안</strong>
           <p style="margin: 0; white-space: pre-wrap; line-height: 1.55">{{ message }}</p>
@@ -65,6 +68,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { customers } from '../data/mock.js'
+import { askGemini } from '../services/gemini.js'
 
 const customerId = ref(customers[0].id)
 const customer = computed(() => customers.find((c) => c.id === customerId.value))
@@ -75,17 +79,28 @@ const channel = ref('카카오톡')
 const purpose = ref('상담 감사 + 요약')
 const message = ref('')
 const copied = ref(false)
+const busy = ref(false)
+const error = ref('')
 const today = new Date().toISOString().slice(0, 10).replace(/-/g, '')
 
-function draftMessage() {
+async function draftMessage() {
   copied.value = false
-  message.value = `${customer.value.name}님, 안녕하세요. 설계사 AI 도우미입니다.
-어제 상담 내용을 짧게 정리해 드렸어요.
-
-• ${purpose.value}
-• 부족한 보장: ${customer.value.gaps.join(', ')}
-• 제안 점수(계약 가능성): ${customer.value.score}점
-
-편하신 시간에 답장 주시면 조율안을 바로 보내드릴게요.`
+  busy.value = true
+  error.value = ''
+  try {
+    message.value = await askGemini({
+      prompt: `${channel.value} 후속 메시지를 작성하세요.
+고객: ${customer.value.name}
+목적: ${purpose.value}
+부족 보장: ${customer.value.gaps.join(', ') || '없음'}
+계약 가능성 점수: ${customer.value.score}
+톤: 친절하고 부담 없이. 특정 조직명·총괄 직함은 넣지 마세요.
+본문만 출력하세요.`,
+    })
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    busy.value = false
+  }
 }
 </script>

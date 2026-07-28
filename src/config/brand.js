@@ -13,7 +13,7 @@ export const navItems = [
   { to: '/coverage', label: '부족 보장 진단', icon: 'shield' },
   { to: '/calculator', label: '금융계산기', icon: 'calc' },
   { to: '/assistant', label: 'AI 상담 비서', icon: 'bot' },
-  { to: '/gems', label: 'Gemini AI', icon: 'gem' },
+  { to: '/gems', label: 'Gemini 연동', icon: 'gem' },
   { to: '/materials', label: '상담자료·후속 메시지', icon: 'doc' },
   { to: '/insights', label: '소개·계약 점수', icon: 'chart' },
   { to: '/compare', label: '상품 비교 엔진', icon: 'scale' },
